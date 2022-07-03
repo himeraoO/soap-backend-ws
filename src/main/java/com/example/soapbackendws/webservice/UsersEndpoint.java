@@ -97,7 +97,7 @@ public class UsersEndpoint {
             user.setPassword(request.getPassword());
             List<Long> listRolesIds = request.getRolesIds();
 
-            if (listRolesIds.isEmpty()){
+            if ((listRolesIds == null) || (listRolesIds.isEmpty()) ){
                 user.setRoles(new HashSet<>());
                 userService.save(user);
             }else {
@@ -106,6 +106,9 @@ public class UsersEndpoint {
 
             UserDetails userDetails = new UserDetails();
 //            BeanUtils.copyProperties(user, userDetails);
+            userDetails.setLogin(user.getLogin());
+            userDetails.setUsername(user.getUsername());
+
             response.setUserDetails(userDetails);
             serviceStatus.setStatusCode("SUCCESS");
             serviceStatus.setMessage("Content Added Successfully");
