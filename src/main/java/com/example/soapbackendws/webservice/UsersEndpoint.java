@@ -123,26 +123,31 @@ public class UsersEndpoint {
         return response;
     }
 
-//    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateUserDetailsRequest")
-//    @ResponsePayload
-//    public UpdateUserDetailsResponse updateUser(@RequestPayload UpdateUserDetailsRequest request) {
-//        User user = new User();
-//
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateUserDetailsRequest")
+    @ResponsePayload
+    public UpdateUserDetailsResponse updateUser(@RequestPayload UpdateUserDetailsRequest request) {
+        User user = new User();
+        ServiceStatus serviceStatus = new ServiceStatus();
 //        BeanUtils.copyProperties(request.getUserDetails(), user);
-//
-//        List<Long> rolesIds = request.getRolesIds();
-//
-//        if (rolesIds.isEmpty()){
-//            userService.update(user);
-//        }else {
-//            userService.update(user, rolesIds);
-//        }
-//
-//        ServiceStatus serviceStatus = new ServiceStatus();
-//        serviceStatus.setStatusCode("SUCCESS");
-//        serviceStatus.setMessage("Content Updated Successfully");
-//        UpdateUserDetailsResponse response = new UpdateUserDetailsResponse();
-//        response.setServiceStatus(serviceStatus);
-//        return response;
-//    }
+        UserAllDetails userAllDetails = request.getUserAllDetails();
+        if(userService.findByLogin(userAllDetails.getLogin()) != null) {
+            user.setLogin(userAllDetails.getLogin());
+            user.setUsername(userAllDetails.getUsername());
+            user.setPassword(userAllDetails.getPassword());
+            List<Long> rolesIds = request.getRolesIds();
+            if ((rolesIds == null) || (rolesIds.isEmpty())) {
+                userService.update(user);
+            } else {
+                userService.update(user, rolesIds);
+            }
+            serviceStatus.setStatusCode("SUCCESS");
+            serviceStatus.setMessage("Content Updated Successfully");
+        }else {
+            serviceStatus.setStatusCode("FALSE");
+            serviceStatus.setMessage("Content Not Available. Updated Failed");
+        }
+        UpdateUserDetailsResponse response = new UpdateUserDetailsResponse();
+        response.setServiceStatus(serviceStatus);
+        return response;
+    }
 }
