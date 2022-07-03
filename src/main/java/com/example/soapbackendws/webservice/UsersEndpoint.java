@@ -4,7 +4,6 @@ import com.example.soapbackendws.repository.entity.Role;
 import com.example.soapbackendws.repository.entity.User;
 import com.example.soapbackendws.service.UserService;
 import com.example.soapbackendws.soapws.*;
-//import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -35,7 +34,6 @@ public class UsersEndpoint {
         List<User> userListList = userService.findAll();
         for (int i = 0; i < userListList.size(); i++) {
             UserDetails ob = new UserDetails();
-//            BeanUtils.copyProperties(userListList.get(i), ob);
             User user = userListList.get(i);
             ob.setLogin(user.getLogin());
             ob.setUsername(user.getUsername());
@@ -50,7 +48,6 @@ public class UsersEndpoint {
     public GetUserDetailsByLoginResponse getUser(@RequestPayload GetUserDetailsByLoginRequest request) {
         GetUserDetailsByLoginResponse response = new GetUserDetailsByLoginResponse();
         UserDetailsWithRoles userDetails = new UserDetailsWithRoles();
-//        BeanUtils.copyProperties(userService.findByLogin(request.getLogin()), userDetails);
         User user = userService.findByLogin(request.getLogin());
         userDetails.setLogin(user.getLogin());
         userDetails.setUsername(user.getUsername());
@@ -89,37 +86,30 @@ public class UsersEndpoint {
         AddUserDetailsResponse response = new AddUserDetailsResponse();
         ServiceStatus serviceStatus = new ServiceStatus();
         User userBD = userService.findByLogin(request.getLogin());
-
         if(userBD == null){
             User user = new User();
             user.setLogin(request.getLogin());
             user.setUsername(request.getName());
             user.setPassword(request.getPassword());
             List<Long> listRolesIds = request.getRolesIds();
-
             if ((listRolesIds == null) || (listRolesIds.isEmpty()) ){
                 user.setRoles(new HashSet<>());
                 userService.save(user);
             }else {
                 userService.save(user, listRolesIds);
             }
-
             UserDetails userDetails = new UserDetails();
-//            BeanUtils.copyProperties(user, userDetails);
             userDetails.setLogin(user.getLogin());
             userDetails.setUsername(user.getUsername());
-
             response.setUserDetails(userDetails);
             serviceStatus.setStatusCode("SUCCESS");
             serviceStatus.setMessage("Content Added Successfully");
             response.setServiceStatus(serviceStatus);
-
         }else {
             serviceStatus.setStatusCode("CONFLICT");
             serviceStatus.setMessage("Content Already Available");
             response.setServiceStatus(serviceStatus);
         }
-
         return response;
     }
 
@@ -128,7 +118,6 @@ public class UsersEndpoint {
     public UpdateUserDetailsResponse updateUser(@RequestPayload UpdateUserDetailsRequest request) {
         User user = new User();
         ServiceStatus serviceStatus = new ServiceStatus();
-//        BeanUtils.copyProperties(request.getUserDetails(), user);
         UserAllDetails userAllDetails = request.getUserAllDetails();
         if(userService.findByLogin(userAllDetails.getLogin()) != null) {
             user.setLogin(userAllDetails.getLogin());

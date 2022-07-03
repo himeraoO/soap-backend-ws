@@ -119,7 +119,6 @@
                 <configuration>
                     <sources>
                         <source>src/main/resources/xsds</source>
-<!--                        <source>src/main/resources/</source>-->
                     </sources>
                     <packageName>com.example.soapbackendws.soapws</packageName>
                     <clearOutputDir>false</clearOutputDir>
