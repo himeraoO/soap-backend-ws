@@ -5,6 +5,7 @@
     <xs:element name="getUsersRequest">
         <xs:complexType/>
     </xs:element>
+
     <xs:element name="getUsersResponse">
         <xs:complexType>
             <xs:sequence>
@@ -12,16 +13,12 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
     <xs:complexType name="userDetails">
         <xs:sequence>
             <xs:element name="login" type="xs:string"/>
             <xs:element name="username" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="userDetailsWithRoles">
-        <xs:sequence>
-            <xs:element name="login" type="xs:string"/>
-            <xs:element name="username" type="xs:string"/>
+            <xs:element name="password" type="xs:string" minOccurs="0"/>
             <xs:element name="roles" type="tns:roleDetails" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
@@ -32,14 +29,7 @@
             <xs:element name="name" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="userAllDetails">
-        <xs:sequence>
-            <xs:element name="login" type="xs:string"/>
-            <xs:element name="username" type="xs:string"/>
-            <xs:element name="password" type="xs:string"/>
-            <xs:element name="roles" type="tns:roleDetails" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
+
 <!--    Получать конкретного пользователя (с его ролями) из БД-->
     <xs:element name="getUserDetailsByLoginRequest">
         <xs:complexType>
@@ -48,13 +38,15 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="getUserDetailsByLoginResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="userDetailsWithRoles" type="tns:userDetailsWithRoles"/>
+                <xs:element name="userDetails" type="tns:userDetails"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
 <!--    Удалять пользователя в БД-->
     <xs:element name="deleteUserDetailsRequest">
         <xs:complexType>
@@ -63,6 +55,7 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="deleteUserDetailsResponse">
         <xs:complexType>
             <xs:sequence>
@@ -70,12 +63,14 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
     <xs:complexType name="serviceStatus">
         <xs:sequence>
             <xs:element name="statusCode" type="xs:string"/>
             <xs:element name="message" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
+
 <!--    Добавлять нового пользователя с ролями в БД-->
     <xs:element name="addUserDetailsRequest">
         <xs:complexType>
@@ -87,6 +82,7 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="addUserDetailsResponse">
         <xs:complexType>
             <xs:sequence>
@@ -95,15 +91,17 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
 <!--    Редактировать существующего пользователя в БД.-->
     <xs:element name="updateUserDetailsRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="userAllDetails" type="tns:userAllDetails"/>
+                <xs:element name="userDetails" type="tns:userDetails"/>
                 <xs:element name="rolesIds" type="xs:long" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="updateUserDetailsResponse">
         <xs:complexType>
             <xs:sequence>
@@ -111,4 +109,5 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
 </xs:schema>

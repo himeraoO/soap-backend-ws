@@ -47,7 +47,7 @@ public class UsersEndpoint {
     @ResponsePayload
     public GetUserDetailsByLoginResponse getUser(@RequestPayload GetUserDetailsByLoginRequest request) {
         GetUserDetailsByLoginResponse response = new GetUserDetailsByLoginResponse();
-        UserDetailsWithRoles userDetails = new UserDetailsWithRoles();
+        UserDetails userDetails = new UserDetails();
         User user = userService.findByLogin(request.getLogin());
         userDetails.setLogin(user.getLogin());
         userDetails.setUsername(user.getUsername());
@@ -58,7 +58,7 @@ public class UsersEndpoint {
             roleDetails.setName(r.getName());
             userDetails.getRoles().add(roleDetails);
         }
-        response.setUserDetailsWithRoles(userDetails);
+        response.setUserDetails(userDetails);
         return response;
     }
 
@@ -118,7 +118,7 @@ public class UsersEndpoint {
     public UpdateUserDetailsResponse updateUser(@RequestPayload UpdateUserDetailsRequest request) {
         User user = new User();
         ServiceStatus serviceStatus = new ServiceStatus();
-        UserAllDetails userAllDetails = request.getUserAllDetails();
+        UserDetails userAllDetails = request.getUserDetails();
         if(userService.findByLogin(userAllDetails.getLogin()) != null) {
             user.setLogin(userAllDetails.getLogin());
             user.setUsername(userAllDetails.getUsername());
